@@ -13,14 +13,17 @@
 Para compreender como implementar o Pegasus PDV com emissão de recibo para MEI e com emissão de documentos fiscais (NFC-e, SAT e MFE), faça o Curso T2Ti Pegasus PDV disponível no seguinte link <a href="http://t2ti.com/curso/video/pegasus-pdv-5000/?utm_source=GITHUB">http://t2ti.com/curso/video/pegasus-pdv-5000/</a>. O Pegasus PDV já está em produção em fase beta. Você pode baixar os fontes e alterar de acordo com sua vontade e pode também acompanhar o andamento do projeto no <a href="https://trello.com/b/xnlmJ1wc/t2ti-pegasus-pdv">Quadro Trello Público</a> criado para este fim. 	
                     <br /> <br /> 
 	Clique na imagem acima para acessar a página do Curso Pegasus PDV que contém <b>153 horas em vídeo aulas</b>. Após fazer este curso você estará apto para contruir o seu próprio PDV com a emissão de recibo, NFC-e, SAT ou MFE. Além disso, compreenderá plenamente como utilizar o código fonte aqui disponível.
-<hr />
+			<a href="http://t2ti.com/curso/video/pegasus-pdv-5000/?utm_source=GITHUB">
+				<center><img src="http://t2ti.com/images/erp3/pegasus-consome-acbr-monitor.jpg" /></center>
+			</a>
+	<hr />
                     <h3>Características do Projeto</h3>
 Veja abaixo uma lista de características do projeto. Provavelmente existe alguma coisa que você, desenvolvedor, está procurando para o seu projeto e vai aproveitar daqui. É possível também que você já inicie seu negócio com essa aplicação. Desejamos tudo de bom e muito sucesso para você!
 	<br />
 	<br />
                                     <ul>
                                         <li>
-                                            <b> <a href="https://flutter.dev/">Flutter:</a></b> O T2Ti Pegasus PDV é desenvolvido em Flutter e, dessa maneira, poderá rodar em diversas plataformas: Windows, Linux, MacOS, Android, iOS e para Web. Nessa fase Beta estamos fazendo testes no Windows e no Android. Com o lançamento do projeto no github sabemos que contaremos com testes realizados por desenvolvedores em outras plataformas. Em breve a T2Ti também iniciará testes nas demais plataformas.
+                                            <b> <a href="https://flutter.dev/">Flutter:</a></b> O T2Ti Pegasus PDV é desenvolvido em Flutter e, dessa maneira, poderá rodar em diversas plataformas: Windows, Linux, MacOS, Android, iOS e para Web. Nessa fase Beta estamos fazendo testes no Windows e no Android. Com o lançamento do projeto no github sabemos que contaremos com testes realizados por desenvolvedores em outras plataformas. Em breve a T2Ti também iniciará testes nas demais plataformas. Para compilar o projeto use a versão 2.2.2 do Flutter.
                                         </li>
                                         <li>
 						<b> <a href="https://www.sqlite.org/index.html">SQLite:</a> </b> A versão Lite do T2Ti Pegasus PDV é monousuário e funciona com banco de dados local. O banco de dados escolhido para este fim foi o SQLite. A versão Premium funcionará com o SQLite como banco de dados local, mas contará com o recurso de sincronização com o banco de dados da retaguarda.
@@ -94,6 +97,16 @@ Veja abaixo uma lista de características do projeto. Provavelmente existe algum
                     <br />  
 	Pronto! Está tudo certo para usar a aplicação. Abra o projeto no VS Code ou no Android Studio e execute ou então execute a aplicação com o seguinte comando 'flutter run -d windows'.
   	<br /><br />
+	<hr width="20%" />
+Se tiver alguma dificuldade para rodar o projeto, siga o passo a passo abaixo. Lembrando que não estamos usando a última versão do Flutter ainda. O projeto deve rodar na versão 2.2.2.<br />
+<br />1: faça um downgrade para o fluter v2.2.2 canal beta
+<br />2: crie um projeto novo, com o mesmo nome pegasus_pdv
+<br />3: copie os arquivos .env, sqlite.dll e as pastas lib e assets do pegasus
+<br />4: no pubspec.yaml e pubspec.lock (se existir) deixe a versão do moor em 4.3.2
+<br />5: em C:\Users\SEU_USUARIO\AppData\Local\Pub\Cache\hosted\pub.dartlang.org -> deixe a pasta do moor 4.3.2 (verifique a pasta onde seus pacotes são armazenados)
+<br />6: execute o comando: flutter clean
+<br />7: execute o comando: flutter update-packages
+<br />8: execute o  comando: flutter pub get	
 	<hr />
 	Assista ao vídeo de apresentação no Youtube.
 	<br /><br />

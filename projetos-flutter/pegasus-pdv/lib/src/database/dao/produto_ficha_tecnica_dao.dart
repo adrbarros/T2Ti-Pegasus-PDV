@@ -48,14 +48,14 @@ class ProdutoFichaTecnicaDao extends DatabaseAccessor<AppDatabase> with _$Produt
 
   ProdutoFichaTecnicaDao(this.db) : super(db);
 
-  List<ProdutoFichaTecnica>? listaProdutoFichaTecnica; 
+  List<ProdutoFichaTecnica> listaProdutoFichaTecnica = []; 
   
-  Future<List<ProdutoFichaTecnica>?> consultarLista() async {
+  Future<List<ProdutoFichaTecnica>> consultarLista() async {
     listaProdutoFichaTecnica = await select(produtoFichaTecnicas).get();
     return listaProdutoFichaTecnica;
   }  
 
-  Future<List<ProdutoFichaTecnica>?> consultarListaFiltro(String campo, String valor) async {
+  Future<List<ProdutoFichaTecnica>> consultarListaFiltro(String campo, String valor) async {
     listaProdutoFichaTecnica = await (customSelect("SELECT * FROM PRODUTO_FICHA_TECNICA WHERE " + campo + " like '%" + valor + "%'", 
                                 readsFrom: { produtoFichaTecnicas }).map((row) {
                                   return ProdutoFichaTecnica.fromData(row.data, db);  

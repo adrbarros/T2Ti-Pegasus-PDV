@@ -330,8 +330,8 @@ class _ReservaListaPageState extends State<ReservaListaPage> {
 
   Future _refrescarTela() async {
     await Sessao.db.reservaDao.consultarListaMontado(
-      dataInicio: Biblioteca.converteDataInicioParaFiltro(_dataInicio), 
-      dataFim: Biblioteca.converteDataFimParaFiltro(_dataFim), 
+      dataInicio: Biblioteca.removerTempoDaData(_dataInicio)!, 
+      dataFim: Biblioteca.removerTempoDaData(_dataFim)!, 
       situacao: _situacaoReserva!
     );
     setState(() {

@@ -35,6 +35,8 @@ OTHER DEALINGS IN THE SOFTWARE.
 *******************************************************************************/
 import 'package:moor/moor.dart';
 
+import '../database_classes.dart';
+
 @DataClassName("ComandaDetalhe")
 @UseRowClass(ComandaDetalhe)
 class ComandaDetalhes extends Table {
@@ -43,7 +45,7 @@ class ComandaDetalhes extends Table {
 
   IntColumn get id => integer().named('ID').autoIncrement()();
   IntColumn get idComanda => integer().named('ID_COMANDA').nullable().customConstraint('NULLABLE REFERENCES COMANDA(ID)')();
-  IntColumn get idCardapio => integer().named('ID_CARDAPIO').nullable().customConstraint('NULLABLE REFERENCES CARDAPIO(ID)')();
+  IntColumn get idProduto => integer().named('ID_PRODUTO').nullable().customConstraint('NULLABLE REFERENCES PRODUTO(ID)')();
   RealColumn get quantidade => real().named('QUANTIDADE').nullable()();
   RealColumn get valorUnitario => real().named('VALOR_UNITARIO').nullable()();
   RealColumn get valorTotal => real().named('VALOR_TOTAL').nullable()();
@@ -51,10 +53,22 @@ class ComandaDetalhes extends Table {
   TextColumn get gerouPedidoCozinha => text().named('GEROU_PEDIDO_COZINHA').withLength(min: 0, max: 1).nullable()();
 }
 
+class ComandaDetalheMontado {
+  ComandaDetalhe? comandaDetalhe;
+  ProdutoMontado? produtoMontado;
+  List<ComandaDetalheComplemento>? listaComandaDetalheComplemento;
+
+  ComandaDetalheMontado({
+    this.comandaDetalhe,
+    this.produtoMontado,
+    this.listaComandaDetalheComplemento,
+  });
+}
+
 class ComandaDetalhe extends DataClass implements Insertable<ComandaDetalhe> {
   final int? id;
   final int? idComanda;
-  final int? idCardapio;
+  final int? idProduto;
   final double? quantidade;
   final double? valorUnitario;
   final double? valorTotal;
@@ -65,7 +79,7 @@ class ComandaDetalhe extends DataClass implements Insertable<ComandaDetalhe> {
     {
       required this.id,
       this.idComanda,
-      this.idCardapio,
+      this.idProduto,
       this.quantidade,
       this.valorUnitario,
       this.valorTotal,
@@ -79,7 +93,7 @@ class ComandaDetalhe extends DataClass implements Insertable<ComandaDetalhe> {
     return ComandaDetalhe(
       id: const IntType().mapFromDatabaseResponse(data['${effectivePrefix}ID']),
       idComanda: const IntType().mapFromDatabaseResponse(data['${effectivePrefix}ID_COMANDA']),
-      idCardapio: const IntType().mapFromDatabaseResponse(data['${effectivePrefix}ID_CARDAPIO']),
+      idProduto: const IntType().mapFromDatabaseResponse(data['${effectivePrefix}ID_PRODUTO']),
       quantidade: const RealType().mapFromDatabaseResponse(data['${effectivePrefix}QUANTIDADE']),
       valorUnitario: const RealType().mapFromDatabaseResponse(data['${effectivePrefix}VALOR_UNITARIO']),
       valorTotal: const RealType().mapFromDatabaseResponse(data['${effectivePrefix}VALOR_TOTAL']),
@@ -97,8 +111,8 @@ class ComandaDetalhe extends DataClass implements Insertable<ComandaDetalhe> {
     if (!nullToAbsent || idComanda != null) {
       map['ID_COMANDA'] = Variable<int?>(idComanda);
     }
-    if (!nullToAbsent || idCardapio != null) {
-      map['ID_CARDAPIO'] = Variable<int?>(idCardapio);
+    if (!nullToAbsent || idProduto != null) {
+      map['ID_PRODUTO'] = Variable<int?>(idProduto);
     }
     if (!nullToAbsent || quantidade != null) {
       map['QUANTIDADE'] = Variable<double?>(quantidade);
@@ -124,9 +138,9 @@ class ComandaDetalhe extends DataClass implements Insertable<ComandaDetalhe> {
       idComanda: idComanda == null && nullToAbsent
         ? const Value.absent()
         : Value(idComanda),
-      idCardapio: idCardapio == null && nullToAbsent
+      idProduto: idProduto == null && nullToAbsent
         ? const Value.absent()
-        : Value(idCardapio),
+        : Value(idProduto),
       quantidade: quantidade == null && nullToAbsent
         ? const Value.absent()
         : Value(quantidade),
@@ -150,7 +164,7 @@ class ComandaDetalhe extends DataClass implements Insertable<ComandaDetalhe> {
     return ComandaDetalhe(
       id: serializer.fromJson<int>(json['id']),
       idComanda: serializer.fromJson<int>(json['idComanda']),
-      idCardapio: serializer.fromJson<int>(json['idCardapio']),
+      idProduto: serializer.fromJson<int>(json['idProduto']),
       quantidade: serializer.fromJson<double>(json['quantidade']),
       valorUnitario: serializer.fromJson<double>(json['valorUnitario']),
       valorTotal: serializer.fromJson<double>(json['valorTotal']),
@@ -165,7 +179,7 @@ class ComandaDetalhe extends DataClass implements Insertable<ComandaDetalhe> {
     return <String, dynamic>{
       'id': serializer.toJson<int?>(id),
       'idComanda': serializer.toJson<int?>(idComanda),
-      'idCardapio': serializer.toJson<int?>(idCardapio),
+      'idProduto': serializer.toJson<int?>(idProduto),
       'quantidade': serializer.toJson<double?>(quantidade),
       'valorUnitario': serializer.toJson<double?>(valorUnitario),
       'valorTotal': serializer.toJson<double?>(valorTotal),
@@ -178,7 +192,7 @@ class ComandaDetalhe extends DataClass implements Insertable<ComandaDetalhe> {
         {
 		  int? id,
           int? idComanda,
-          int? idCardapio,
+          int? idProduto,
           double? quantidade,
           double? valorUnitario,
           double? valorTotal,
@@ -188,7 +202,7 @@ class ComandaDetalhe extends DataClass implements Insertable<ComandaDetalhe> {
       ComandaDetalhe(
         id: id ?? this.id,
         idComanda: idComanda ?? this.idComanda,
-        idCardapio: idCardapio ?? this.idCardapio,
+        idProduto: idProduto ?? this.idProduto,
         quantidade: quantidade ?? this.quantidade,
         valorUnitario: valorUnitario ?? this.valorUnitario,
         valorTotal: valorTotal ?? this.valorTotal,
@@ -201,7 +215,7 @@ class ComandaDetalhe extends DataClass implements Insertable<ComandaDetalhe> {
     return (StringBuffer('ComandaDetalhe(')
           ..write('id: $id, ')
           ..write('idComanda: $idComanda, ')
-          ..write('idCardapio: $idCardapio, ')
+          ..write('idProduto: $idProduto, ')
           ..write('quantidade: $quantidade, ')
           ..write('valorUnitario: $valorUnitario, ')
           ..write('valorTotal: $valorTotal, ')
@@ -215,7 +229,7 @@ class ComandaDetalhe extends DataClass implements Insertable<ComandaDetalhe> {
   int get hashCode => Object.hashAll([
       id,
       idComanda,
-      idCardapio,
+      idProduto,
       quantidade,
       valorUnitario,
       valorTotal,
@@ -229,7 +243,7 @@ class ComandaDetalhe extends DataClass implements Insertable<ComandaDetalhe> {
       (other is ComandaDetalhe &&
           other.id == id &&
           other.idComanda == idComanda &&
-          other.idCardapio == idCardapio &&
+          other.idProduto == idProduto &&
           other.quantidade == quantidade &&
           other.valorUnitario == valorUnitario &&
           other.valorTotal == valorTotal &&
@@ -242,7 +256,7 @@ class ComandaDetalhesCompanion extends UpdateCompanion<ComandaDetalhe> {
 
   final Value<int?> id;
   final Value<int?> idComanda;
-  final Value<int?> idCardapio;
+  final Value<int?> idProduto;
   final Value<double?> quantidade;
   final Value<double?> valorUnitario;
   final Value<double?> valorTotal;
@@ -252,7 +266,7 @@ class ComandaDetalhesCompanion extends UpdateCompanion<ComandaDetalhe> {
   const ComandaDetalhesCompanion({
     this.id = const Value.absent(),
     this.idComanda = const Value.absent(),
-    this.idCardapio = const Value.absent(),
+    this.idProduto = const Value.absent(),
     this.quantidade = const Value.absent(),
     this.valorUnitario = const Value.absent(),
     this.valorTotal = const Value.absent(),
@@ -263,7 +277,7 @@ class ComandaDetalhesCompanion extends UpdateCompanion<ComandaDetalhe> {
   ComandaDetalhesCompanion.insert({
     this.id = const Value.absent(),
     this.idComanda = const Value.absent(),
-    this.idCardapio = const Value.absent(),
+    this.idProduto = const Value.absent(),
     this.quantidade = const Value.absent(),
     this.valorUnitario = const Value.absent(),
     this.valorTotal = const Value.absent(),
@@ -274,7 +288,7 @@ class ComandaDetalhesCompanion extends UpdateCompanion<ComandaDetalhe> {
   static Insertable<ComandaDetalhe> custom({
     Expression<int>? id,
     Expression<int>? idComanda,
-    Expression<int>? idCardapio,
+    Expression<int>? idProduto,
     Expression<double>? quantidade,
     Expression<double>? valorUnitario,
     Expression<double>? valorTotal,
@@ -284,7 +298,7 @@ class ComandaDetalhesCompanion extends UpdateCompanion<ComandaDetalhe> {
     return RawValuesInsertable({
       if (id != null) 'ID': id,
       if (idComanda != null) 'ID_COMANDA': idComanda,
-      if (idCardapio != null) 'ID_CARDAPIO': idCardapio,
+      if (idProduto != null) 'ID_PRODUTO': idProduto,
       if (quantidade != null) 'QUANTIDADE': quantidade,
       if (valorUnitario != null) 'VALOR_UNITARIO': valorUnitario,
       if (valorTotal != null) 'VALOR_TOTAL': valorTotal,
@@ -297,7 +311,7 @@ class ComandaDetalhesCompanion extends UpdateCompanion<ComandaDetalhe> {
       {
 	  Value<int>? id,
       Value<int>? idComanda,
-      Value<int>? idCardapio,
+      Value<int>? idProduto,
       Value<double>? quantidade,
       Value<double>? valorUnitario,
       Value<double>? valorTotal,
@@ -307,7 +321,7 @@ class ComandaDetalhesCompanion extends UpdateCompanion<ComandaDetalhe> {
     return ComandaDetalhesCompanion(
       id: id ?? this.id,
       idComanda: idComanda ?? this.idComanda,
-      idCardapio: idCardapio ?? this.idCardapio,
+      idProduto: idProduto ?? this.idProduto,
       quantidade: quantidade ?? this.quantidade,
       valorUnitario: valorUnitario ?? this.valorUnitario,
       valorTotal: valorTotal ?? this.valorTotal,
@@ -325,8 +339,8 @@ class ComandaDetalhesCompanion extends UpdateCompanion<ComandaDetalhe> {
     if (idComanda.present) {
       map['ID_COMANDA'] = Variable<int?>(idComanda.value);
     }
-    if (idCardapio.present) {
-      map['ID_CARDAPIO'] = Variable<int?>(idCardapio.value);
+    if (idProduto.present) {
+      map['ID_PRODUTO'] = Variable<int?>(idProduto.value);
     }
     if (quantidade.present) {
       map['QUANTIDADE'] = Variable<double?>(quantidade.value);
@@ -351,7 +365,7 @@ class ComandaDetalhesCompanion extends UpdateCompanion<ComandaDetalhe> {
     return (StringBuffer('ComandaDetalhesCompanion(')
           ..write('id: $id, ')
           ..write('idComanda: $idComanda, ')
-          ..write('idCardapio: $idCardapio, ')
+          ..write('idProduto: $idProduto, ')
           ..write('quantidade: $quantidade, ')
           ..write('valorUnitario: $valorUnitario, ')
           ..write('valorTotal: $valorTotal, ')
@@ -386,15 +400,15 @@ class $ComandaDetalhesTable extends ComandaDetalhes
           typeName: 'INTEGER',
           requiredDuringInsert: false,
           $customConstraints: 'NULLABLE REFERENCES COMANDA(ID)');
-  final VerificationMeta _idCardapioMeta =
-      const VerificationMeta('idCardapio');
-  GeneratedColumn<int>? _idCardapio;
+  final VerificationMeta _idProdutoMeta =
+      const VerificationMeta('idProduto');
+  GeneratedColumn<int>? _idProduto;
   @override
-  GeneratedColumn<int> get idCardapio =>
-      _idCardapio ??= GeneratedColumn<int>('ID_CARDAPIO', aliasedName, true,
+  GeneratedColumn<int> get idProduto =>
+      _idProduto ??= GeneratedColumn<int>('ID_PRODUTO', aliasedName, true,
           typeName: 'INTEGER',
           requiredDuringInsert: false,
-          $customConstraints: 'NULLABLE REFERENCES CARDAPIO(ID)');
+          $customConstraints: 'NULLABLE REFERENCES PRODUTO(ID)');
   final VerificationMeta _quantidadeMeta =
       const VerificationMeta('quantidade');
   GeneratedColumn<double>? _quantidade;
@@ -435,7 +449,7 @@ class $ComandaDetalhesTable extends ComandaDetalhes
   List<GeneratedColumn> get $columns => [
         id,
         idComanda,
-        idCardapio,
+        idProduto,
         quantidade,
         valorUnitario,
         valorTotal,
@@ -461,9 +475,9 @@ class $ComandaDetalhesTable extends ComandaDetalhes
         context.handle(_idComandaMeta,
             idComanda.isAcceptableOrUnknown(data['ID_COMANDA']!, _idComandaMeta));
     }
-    if (data.containsKey('ID_CARDAPIO')) {
-        context.handle(_idCardapioMeta,
-            idCardapio.isAcceptableOrUnknown(data['ID_CARDAPIO']!, _idCardapioMeta));
+    if (data.containsKey('ID_PRODUTO')) {
+        context.handle(_idProdutoMeta,
+            idProduto.isAcceptableOrUnknown(data['ID_PRODUTO']!, _idProdutoMeta));
     }
     if (data.containsKey('QUANTIDADE')) {
         context.handle(_quantidadeMeta,
